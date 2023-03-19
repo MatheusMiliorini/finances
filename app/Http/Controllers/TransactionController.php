@@ -25,6 +25,7 @@ class TransactionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'account_id' => ['required', 'string', 'exists:accounts,_id'],
+            'name' => ['required', 'string'],
             'type' => ['required', 'in:I,E'], // Transfer uses another endpoint
             'amount' => ['required', 'integer', 'min:1'],
             'category' => ['required', 'string'], // TODO change to DB categories
@@ -51,7 +52,8 @@ class TransactionController extends Controller
     public function update($id, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'account' => ['string', 'exists:accounts'],
+            'account_id' => ['string', 'exists:accounts'],
+            'name' => ['string'],
             'type' => ['in:I,E'], // Transfer uses another endpoint
             'amount' => ['integer', 'min:1'],
             'category' => ['string'], // TODO change to DB categories
@@ -67,5 +69,22 @@ class TransactionController extends Controller
         } catch (ModelNotFoundException $ex) {
             return response(null, 404);
         }
+    }
+
+    public function transfer(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string'],
+            'from' => ['required', 'string', 'exists:accounts,_id'],
+            'to' => ['required', 'string', 'exists:accounts,_id'],
+            'amount' => ['required', 'integer', 'min:1'],
+            'date' => ['required', 'date'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 400);
+        }
+        return response()->json($this->transactionService->transfer($validator->validated()));
     }
 }

@@ -14,11 +14,13 @@ class Transaction extends Model
     public const TRANSFER = 'T';
 
     protected $fillable = [
+        'name',
         'account_id',
         'type',
         'amount',
         'category',
         'date',
+        'other_id', // Used for transactions
     ];
 
     public function account()

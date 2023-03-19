@@ -42,4 +42,30 @@ class TransactionService
         $this->accountService->updateBalance($transaction);
         return $transaction;
     }
+
+    public function transfer(array $data)
+    {
+        $from = new Transaction([
+            'name' => $data['name'],
+            'account_id' => $data['from'],
+            'type' => Transaction::EXPENSE,
+            'amount' => $data['amount'],
+            'category' => 'Tranfer',
+            'date' => $data['date'],
+        ]);
+        $from->save();
+        $to = new Transaction([
+            'name' => $data['name'],
+            'account_id' => $data['to'],
+            'type' => Transaction::INCOME,
+            'amount' => $data['amount'],
+            'category' => 'Tranfer',
+            'date' => $data['date'],
+            'other_id' => $from->_id,
+        ]);
+        $to->save();
+        $this->accountService->updateBalance($from);
+        $this->accountService->updateBalance($to);
+        return compact('from', 'to');
+    }
 }

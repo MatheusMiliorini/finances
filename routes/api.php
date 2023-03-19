@@ -33,4 +33,5 @@ Route::prefix('transaction')->group(function() {
     Route::post('/', [TransactionController::class, 'store']);
     Route::put('/{id}', [TransactionController::class, 'update']);
     Route::delete('/{id}', [TransactionController::class, 'delete']);
+    Route::post('/transfer', [TransactionController::class, 'transfer']);
 });
