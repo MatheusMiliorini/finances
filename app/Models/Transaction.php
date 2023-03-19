@@ -11,7 +11,6 @@ class Transaction extends Model
 
     public const INCOME = 'I';
     public const EXPENSE = 'E';
-    public const TRANSFER = 'T';
 
     protected $fillable = [
         'name',
@@ -20,11 +19,16 @@ class Transaction extends Model
         'amount',
         'category',
         'date',
-        'other_id', // Used for transactions
+        'other_id', // Used for transferences
     ];
 
     public function account()
     {
         return $this->belongsTo(Account::class, 'account_id');
+    }
+
+    public function other()
+    {
+        return $this->hasOne(self::class, 'other_id');
     }
 }

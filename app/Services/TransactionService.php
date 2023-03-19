@@ -30,6 +30,10 @@ class TransactionService
     {
         $transaction = Transaction::findOrFail($id);
         $this->accountService->updateBalance($transaction, true);
+        if ($transaction->other_id) {
+            $this->accountService->updateBalance($transaction->other, true);
+            $transaction->other->delete();
+        }
         return $transaction->delete();
     }
 
@@ -64,6 +68,7 @@ class TransactionService
             'other_id' => $from->_id,
         ]);
         $to->save();
+        $from->update(['other_id' => $to->_id]);
         $this->accountService->updateBalance($from);
         $this->accountService->updateBalance($to);
         return compact('from', 'to');
