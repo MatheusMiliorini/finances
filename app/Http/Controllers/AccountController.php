@@ -21,6 +21,15 @@ class AccountController extends Controller
         return $this->accountService->list();
     }
 
+    public function get($id)
+    {
+        try {
+            return response()->json($this->accountService->get($id));
+        } catch (ModelNotFoundException $ex) {
+            return response(null, 404);
+        }
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
