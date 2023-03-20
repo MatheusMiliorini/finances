@@ -9,7 +9,7 @@ class AccountService
 {
     public function list()
     {
-        return Account::all();
+        return Account::orderBy('name')->get();
     }
 
     public function get($id)
