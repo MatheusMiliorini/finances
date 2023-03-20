@@ -9,7 +9,7 @@ class AccountService
 {
     public function list()
     {
-        return Account::simplePaginate(5);
+        return Account::all();
     }
 
     public function get($id)
@@ -48,9 +48,6 @@ class AccountService
             case Transaction::EXPENSE:
                 $transaction->account->currentBalance -= ($transaction->amount * ($isDelete ? -1 : 1));
                 $transaction->account->save();
-                break;
-            case Transaction::TRANSFER:
-                // TODO
                 break;
         }
         return $transaction->account;

@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\AccountService;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,8 +15,8 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function (AccountService $accountService) {
     return Inertia::render('Dashboard', [
-        
+        'accounts' => $accountService->list(),
     ]);
 });
